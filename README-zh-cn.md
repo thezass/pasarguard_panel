@@ -61,21 +61,21 @@
 
 ## 目录
 
--   [概览](#概览)
-    -   [为什么要使用 PasarGuard?](#为什么要使用-PasarGuard)
-        -   [特性](#特性)
--   [安装指南](#安装指南)
--   [配置](#配置)
--   [文档](#文档)
--   [如何使用 API](#如何使用-api)
--   [如何备份 PasarGuard](#如何备份-PasarGuard)
--   [Telegram bot](#telegram-bot)
--   [PasarGuard CLI](#PasarGuard-cli)
--   [PasarGuard Node](#PasarGuard-node)
--   [Webhook 通知](#webhook-通知)
--   [捐赠](#捐赠)
--   [许可](#许可)
--   [贡献者](#贡献者)
+- [概览](#概览)
+  - [为什么要使用 PasarGuard?](#为什么要使用-PasarGuard)
+    - [特性](#特性)
+- [安装指南](#安装指南)
+- [配置](#配置)
+- [文档](#文档)
+- [如何使用 API](#如何使用-api)
+- [如何备份 PasarGuard](#如何备份-PasarGuard)
+- [Telegram bot](#telegram-bot)
+- [PasarGuard CLI](#PasarGuard-cli)
+- [PasarGuard Node](#PasarGuard-node)
+- [Webhook 通知](#webhook-通知)
+- [捐赠](#捐赠)
+- [许可](#许可)
+- [贡献者](#贡献者)
 
 # 概览
 
@@ -87,21 +87,21 @@ PasarGuard 是一个用户友好、功能丰富且可靠的工具。它让您可
 
 ### 特性
 
--   内置 **Web 界面**
--   完全支持 **REST API** 的后端
--   支持 **Vmess**、**VLESS**、**Trojan** 和 **Shadowsocks** 协议
--   单用户的**多协议**支持
--   单入站的**多用户**支持
--   单端口的**多入站**支持（使用 fallbacks）
--   **流量**和**过期日期**限制
--   周期性的流量限制（例如每天、每周等）
--   兼容 **V2ray** 的**订阅链接**（例如 V2RayNG、SingBox、Nekoray 等）和 **Clash**
--   自动化的**分享链接**和**二维码**生成器
--   系统监控和**流量统计**
--   可自定义的 xray 配置
--   **TLS** 支持
--   集成的 **Telegram Bot**
--   **多管理员**支持（WIP）
+- 内置 **Web 界面**
+- 完全支持 **REST API** 的后端
+- 支持 **Vmess**、**VLESS**、**Trojan** 和 **Shadowsocks** 协议
+- 单用户的**多协议**支持
+- 单入站的**多用户**支持
+- 单端口的**多入站**支持（使用 fallbacks）
+- **流量**和**过期日期**限制
+- 周期性的流量限制（例如每天、每周等）
+- 兼容 **V2ray** 的**订阅链接**（例如 V2RayNG、SingBox、Nekoray 等）和 **Clash**
+- 自动化的**分享链接**和**二维码**生成器
+- 系统监控和**流量统计**
+- 可自定义的 xray 配置
+- **TLS** 支持
+- 集成的 **Telegram Bot**
+- **多管理员**支持（WIP）
 
 # 安装指南
 
@@ -133,12 +133,12 @@ sudo bash -c "$(curl -sL https://github.com/PasarGuard/scripts/raw/main/pasargua
 
 安装完成后：
 
--   您将看到日志，可以通过关闭终端或按`Ctrl+C`停止查看
--   PasarGuard 文件将位于`/opt/pasarguard`
--   配置文件位于`/opt/pasarguard/.env`（请参阅[配置](#配置)部分查看变量）
--   数据文件将位于`/var/lib/pasarguard`
--   为安全起见，PasarGuard 仪表板无法通过 IP 地址访问。因此，您必须[获取 SSL 证书](https://pasarguard.github.io/PasarGuard/en/examples/issue-ssl-certificate)并通过打开 Web 浏览器并导航到`https://YOUR_DOMAIN:8000/dashboard/`来访问您的 PasarGuard 仪表板（将 YOUR_DOMAIN 替换为您的实际域）
--   您还可以使用 SSH 端口转发在本地访问 PasarGuard 仪表板而无需域。将`user@serverip`替换为您的实际 SSH 用户名和服务器 IP，然后运行以下命令：
+- 您将看到日志，可以通过关闭终端或按`Ctrl+C`停止查看
+- PasarGuard 文件将位于`/opt/pasarguard`
+- 配置文件位于`/opt/pasarguard/.env`（请参阅[配置](#配置)部分查看变量）
+- 数据文件将位于`/var/lib/pasarguard`
+- 为安全起见，PasarGuard 仪表板无法通过 IP 地址访问。因此，您必须[获取 SSL 证书](https://pasarguard.github.io/PasarGuard/en/examples/issue-ssl-certificate)并通过打开 Web 浏览器并导航到`https://YOUR_DOMAIN:8000/dashboard/`来访问您的 PasarGuard 仪表板（将 YOUR_DOMAIN 替换为您的实际域）
+- 您还可以使用 SSH 端口转发在本地访问 PasarGuard 仪表板而无需域。将`user@serverip`替换为您的实际 SSH 用户名和服务器 IP，然后运行以下命令：
 
 ```bash
 ssh -L 8000:localhost:8000 user@serverip
@@ -201,7 +201,7 @@ uv run alembic upgrade head
 如果您想使用`PasarGuard-cli`，您应该将其链接到`$PATH`中的一个文件，使其可执行，并安装自动完成功能：
 
 ```bash
-sudo ln -s $(pwd)/PasarGuard-cli.py /usr/bin/pasarguard-cli
+sudo ln -s $(pwd)/pasarguard.py /usr/bin/pasarguard-cli
 sudo chmod +x /usr/bin/pasarguard-cli
 pasarguard-cli completion install
 ```

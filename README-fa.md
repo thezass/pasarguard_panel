@@ -197,7 +197,7 @@ uv run alembic upgrade head
 اگر می خواهید از `PasarGuard-cli` استفاده کنید، باید آن را به یک فایل در `$PATH` خود لینک و قابل اجرا (executable) کنید. سپس تکمیل خودکار (auto-completion) آن را نصب کنید:
 
 ```bash
-sudo ln -s $(pwd)/PasarGuard-cli.py /usr/bin/pasarguard-cli
+sudo ln -s $(pwd)/pasarguard.py /usr/bin/pasarguard-cli
 sudo chmod +x /usr/bin/pasarguard-cli
 pasarguard-cli completion install
 ```
@@ -277,12 +277,12 @@ server {
 |                                                                                                                                       نام کاربری مدیر کل |              SUDO_USERNAME               |
 |                                                                                                                                         رمز عبور مدیر کل |              SUDO_PASSWORD               |
 |                                           آدرس دیتابیس ([بر اساس مستندات SQLAlchemy](https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls)) |         SQLALCHEMY_DATABASE_URL          |
-|                                                                                                                                       (پیشفرض: `10`) |           SQLALCHEMY_POOL_SIZE           |
-|                                                                                                                                      (پیشفرض: `30`) |         SQLALCHEMY_MAX_OVERFLOW          |
-|                                                                                               آدرس هاستی که پاسارگارد روی آن اجرا میشود (پیشفرض: `0.0.0.0`) |               UVICORN_HOST               |
-|                                                                                                       پورتی که پاسارگارد روی آن اجرا میشود (پیشفرض: `8000`) |               UVICORN_PORT               |
-|                                                                                                                اجرای پاسارگارد بر روی یک Unix domain socket |               UVICORN_UDS                |
-|                                                                                                               آدرس گواهی SSL به جهت ایمن کردن پنل پاسارگارد |           UVICORN_SSL_CERTFILE           |
+|                                                                                                                                           (پیشفرض: `10`) |           SQLALCHEMY_POOL_SIZE           |
+|                                                                                                                                           (پیشفرض: `30`) |         SQLALCHEMY_MAX_OVERFLOW          |
+|                                                                                            آدرس هاستی که پاسارگارد روی آن اجرا میشود (پیشفرض: `0.0.0.0`) |               UVICORN_HOST               |
+|                                                                                                    پورتی که پاسارگارد روی آن اجرا میشود (پیشفرض: `8000`) |               UVICORN_PORT               |
+|                                                                                                             اجرای پاسارگارد بر روی یک Unix domain socket |               UVICORN_UDS                |
+|                                                                                                            آدرس گواهی SSL به جهت ایمن کردن پنل پاسارگارد |           UVICORN_SSL_CERTFILE           |
 |                                                                                                                                      آدرس کلید گواهی SSL |           UVICORN_SSL_KEYFILE            |
 |                                                          نوع گواهینامه مرجع SSL. از «خصوصی» برای آزمایش CA با امضای خود استفاده کنید (پیش‌فرض: `public`) |           UVICORN_SSL_CA_TYPE            |
 |                                                                                                 مسیر فایل json تنظیمات xray (پیشفرض: `xray_config.json`) |                XRAY_JSON                 |
@@ -294,13 +294,13 @@ server {
 |                                                                                                                آدرس محل template های شخصی سازی شده کاربر |        CUSTOM_TEMPLATES_DIRECTORY        |
 |                                                                            تمپلیت مورد استفاده برای تولید کانفیگ های Clash (پیشفرض: `clash/default.yml`) |       CLASH_SUBSCRIPTION_TEMPLATE        |
 |                                                                                      تمپلیت صفحه اطلاعات اشتراک کاربر (پیشفرض `subscription/index.html`) |        SUBSCRIPTION_PAGE_TEMPLATE        |
-|                                                                             تمپلیت مورد استفاده برای تولید کانفیگ های xray (پیشفرض: `xray/default.yml`) |       XRAY_SUBSCRIPTION_TEMPLATE         |
-|                                                                          تمپلیت مورد استفاده برای تولید کانفیگ های singbox (پیشفرض: `singbox/default.yml`) |      SINGBOX_SUBSCRIPTION_TEMPLATE       |
+|                                                                              تمپلیت مورد استفاده برای تولید کانفیگ های xray (پیشفرض: `xray/default.yml`) |        XRAY_SUBSCRIPTION_TEMPLATE        |
+|                                                                        تمپلیت مورد استفاده برای تولید کانفیگ های singbox (پیشفرض: `singbox/default.yml`) |      SINGBOX_SUBSCRIPTION_TEMPLATE       |
 |                                                                                                              تمپلیت صفحه اول (پیشفرض: `home/index.html`) |            HOME_PAGE_TEMPLATE            |
 |                                                                                        توکن ربات تلگرام (دریافت از [@botfather](https://t.me/botfather)) |            TELEGRAM_API_TOKEN            |
 |                                                                           آیدی عددی ادمین در تلگرام (دریافت از [@userinfobot](https://t.me/userinfobot)) |            TELEGRAM_ADMIN_ID             |
 |                                                                                                                                اجرای ربات از طریق پروکسی |            TELEGRAM_PROXY_URL            |
-|                                                             مدت زمان انقضا توکن دسترسی به پنل پاسارگارد, `0` به معنای بدون تاریخ انقضا است (پیشفرض: `1440`) |     JWT_ACCESS_TOKEN_EXPIRE_MINUTES      |
+|                                                          مدت زمان انقضا توکن دسترسی به پنل پاسارگارد, `0` به معنای بدون تاریخ انقضا است (پیشفرض: `1440`) |     JWT_ACCESS_TOKEN_EXPIRE_MINUTES      |
 |                                                                                        فعال سازی داکیومنتیشن به آدرس `/docs` و `/redoc`(پیشفرض: `False`) |                   DOCS                   |
 |                                                                                                      فعالسازی حالت توسعه (development) (پیشفرض: `False`) |                  DEBUG                   |
 |                                  آدرس webhook که تغییرات حالت یک کاربر به آن ارسال می‌شوند. اگر این متغیر مقدار داشته باشد، ارسال پیام‌ها انجام می‌شوند. |             WEBHOOK_ADDRESS              |
@@ -311,7 +311,7 @@ server {
 |                                                                           چند روز مانده به انتهای سرویس پیام اخطار به آدرس وبهوک ارسال شود (پیشفرض: `3`) |             NOTIFY_DAYS_LEFT             |
 | حذف خودکار کاربران منقضی شده (و بطور اختیاری محدود شده) پس از گذشت این تعداد روز (مقادیر منفی این قابلیت را به طور پیشفرض غیرفعال می کنند. پیشفرض: `-1`) |          USERS_AUTODELETE_DAYS           |
 |                                                                                                 تعیین اینکه کاربران محدودشده شامل حذف خودکار بشوند یا نه | USER_AUTODELETE_INCLUDE_LIMITED_ACCOUNTS |
-|                                                                                                     شما می توانید مسیر api خود را برای اشتراک تغییر دهید |           XRAY_SUBSCRIPTION_PATH           |
+|                                                                                                     شما می توانید مسیر api خود را برای اشتراک تغییر دهید |          XRAY_SUBSCRIPTION_PATH          |
 |                                                                        با توجه به حجم بالای داده، این کار فقط برای postgresql و timescaledb در دسترس است |       ENABLE_RECORDING_NODES_STATS       |
 |                                                           فعال کردن کانفیگ سفارشی JSON برای همه برنامه‌هایی که از آن پشتیبانی می‌کنند (پیش‌فرض: `False`) |         USE_CUSTOM_JSON_DEFAULT          |
 |                                                                                فعال کردن کانفیگ سفارشی JSON فقط برای برنامه‌ی V2rayNG (پیش‌فرض: `False`) |       USE_CUSTOM_JSON_FOR_V2RAYNG        |
