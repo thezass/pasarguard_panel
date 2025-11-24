@@ -9,6 +9,7 @@ import { ChevronsUpDown, LogOut, Network, Wifi, Shield, UsersIcon, UserCircle } 
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { formatBytes } from '@/utils/formatByte'
+import { formatBytes2 } from '@/utils/formatByte'
 import { Badge } from '@/components/ui/badge'
 import { removeAuthToken } from '@/utils/authStorage'
 import { queryClient } from '@/utils/query-client'
@@ -191,6 +192,15 @@ export function NavUser({
                         </span>
                       </span>
                     </div>
+		    <div className="flex items-center gap-2">
+                      <Wifi className="size-3" />
+                      <span>
+                        {'مقدار ترافیک خریداری شده '}:{' '}
+                        <span dir="ltr" style={{ unicodeBidi: 'isolate' }}>
+                          {formatBytes(admin?.traffic_limit)}
+                        </span>
+                      </span>
+                    </div>
                     <div className="flex items-center gap-2">
                       <Wifi className="size-3" />
                       <span>
@@ -200,6 +210,7 @@ export function NavUser({
                         </span>
                       </span>
                     </div>
+
                     <div className="flex items-center gap-2">
                       <UsersIcon className="size-3" />
                       <span>

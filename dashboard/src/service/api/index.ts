@@ -2006,6 +2006,7 @@ export interface AdminDetails {
   discord_id?: AdminDetailsDiscordId
   sub_template?: AdminDetailsSubTemplate
   lifetime_used_traffic?: AdminDetailsLifetimeUsedTraffic
+  traffic_limit?: number
 }
 
 export type AdminCreateNotificationEnable = UserNotificationEnable | null

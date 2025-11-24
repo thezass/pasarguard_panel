@@ -1,3 +1,5 @@
+from fastapi import HTTPException
+import asyncio
 from copy import deepcopy
 from datetime import UTC, datetime, timedelta, timezone
 from enum import Enum
@@ -467,11 +469,43 @@ async def create_user(db: AsyncSession, new_user: UserCreate, groups: list[Group
 
     Returns:
         User: Created user object.
-    """
+   """
+    user_data_limit = new_user.data_limit or 107374182400
+
+
+    result1 = await db.execute(
+        select(func.sum(User.data_limit)).filter(User.admin_id == admin.id)                                                 )
+    admin_config_created = result1.scalar() or 0
+
+    result2 = await db.execute(
+        select(func.sum(User.reseted_usage)).filter(User.admin_id == admin.id)
+    )
+    admin_reseted_usage = result2.scalar() or 0
+
+    result3 = await db.execute(
+            select(Admin.deleted_used).filter(Admin.id == admin.id)
+    )
+    admin_deleted_used = result3.scalar() or 0
+
+    admin_real_limit = (
+     user_data_limit + admin_config_created + admin_reseted_usage + admin_deleted_used
+    )
+
+    if admin.traffic_limit < admin_real_limit and admin.traffic_limit != -1:
+          raise HTTPException(
+            status_code=400,
+            detail="ترافیک پنل شما به اتمام رسیده است"
+        )
+
+ 
+
+
     db_user = User(
         **new_user.model_dump(exclude={"group_ids", "expire", "proxy_settings", "next_plan", "on_hold_timeout"})
     )
+    db_user.username = admin.username + "_" + new_user.username
     db_user.admin = admin
+    db_user.data_limit = user_data_limit
     db_user.groups = groups
     db_user.expire = new_user.expire or None
     db_user.on_hold_timeout = new_user.on_hold_timeout or None
@@ -515,6 +549,21 @@ async def remove_user(db: AsyncSession, db_user: User) -> User:
     Returns:
         User: Removed user object.
     """
+    real_usage = db_user.used_traffic + db_user.reseted_usage
+    if db_user.admin_id:
+
+
+     stmt = (
+        update(Admin)
+        .where(Admin.id == db_user.admin_id)
+        .values({
+            Admin.deleted_used: Admin.deleted_used + real_usage
+        })
+    )
+    await db.execute(stmt)
+
+
+    
     await _delete_user_dependencies(db, [db_user.id])
     await db.execute(delete(User).where(User.id == db_user.id))
     await db.commit()
@@ -551,6 +600,43 @@ async def modify_user(db: AsyncSession, db_user: User, modify: UserModify) -> Us
     Returns:
         User: Updated user object.
     """
+    user_data_limit = modify.data_limit or 107374182400
+    addon_data = 0
+    if modify.data_limit > db_user.data_limit:
+        addon_data = modify.data_limit - db_user.data_limit
+
+
+    result1 = await db.execute(
+        select(func.sum(User.data_limit)).filter(User.admin_id == db_user.admin_id)
+    )
+    admin_config_created = result1.scalar() or 0
+
+    result2 = await db.execute(
+        select(func.sum(User.reseted_usage)).filter(User.admin_id == db_user.admin_id)
+    )
+    admin_reseted_usage = result2.scalar() or 0
+
+    result3 = await db.execute(
+     select(Admin.deleted_used, Admin.traffic_limit).filter(Admin.id == db_user.admin_id)
+    )
+    admin_deleted_used, admin_traffic_limit = result3.first() or (0, 0)
+
+    admin_real_limit = (
+      addon_data + admin_config_created + admin_reseted_usage + admin_deleted_used
+    )
+
+    if admin_traffic_limit < admin_real_limit and admin_traffic_limit != -1:
+          raise HTTPException(
+            status_code=400,
+            detail="ﺕﺭﺎﻔﯿﮐ ﭗﻨﻟ ﺶﻣﺍ ﺐﻫ ﺎﺘﻣﺎﻣ ﺮﺴﯾﺪﻫ ﺎﺴﺗ"
+ )
+
+
+
+
+
+
+
     remove_usage_reminder = False
     remove_expiration_reminder = False
 
@@ -583,7 +669,8 @@ async def modify_user(db: AsyncSession, db_user: User, modify: UserModify) -> Us
                 db_user.status = UserStatus.expired
 
     if modify.data_limit is not None:
-        db_user.data_limit = modify.data_limit or None
+        
+        db_user.data_limit = user_data_limit
         if db_user.status not in [UserStatus.expired, UserStatus.disabled]:
             if not db_user.data_limit or db_user.used_traffic < db_user.data_limit:
                 if db_user.status != UserStatus.on_hold:
