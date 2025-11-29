@@ -3,7 +3,7 @@
  * Do not edit manually.
  * PasarGuardAPI
  * Unified GUI Censorship Resistant Solution
- * OpenAPI spec version: 1.8.1
+ * OpenAPI spec version: 1.8.2
  */
 import { useMutation, useQuery } from '@tanstack/react-query'
 import type {
@@ -902,7 +902,6 @@ export interface SubscriptionOutput {
   /** @maxLength 128 */
   announce?: string
   announce_url?: string
-  host_status_filter: boolean
   rules: SubRule[]
   manual_sub_request?: SubFormatEnable
   applications?: ApplicationOutput[]
@@ -916,7 +915,6 @@ export interface SubscriptionInput {
   /** @maxLength 128 */
   announce?: string
   announce_url?: string
-  host_status_filter: boolean
   rules: SubRule[]
   manual_sub_request?: SubFormatEnable
   applications?: ApplicationInput[]
